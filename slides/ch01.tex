@@ -1,0 +1,206 @@
+\documentclass{beamer}
+
+
+\title{Chapter 1 -- The Big (Bayesian) Picture}
+\date{DATA 335 -- Statistical Modeling -- Winter 2026}
+
+\begin{document}
+
+\frame{\titlepage}
+
+\begin{frame}
+    \setlength\parskip{1em}
+    \frametitle{1.1 Thinking like a Bayesian}
+    Two philosophies of statistics: \textbf{Frequentist} and \textbf{Bayesian}
+    
+    Common goal: Learn from data about the world around us.
+\end{frame}
+
+\begin{frame}
+    \setlength\parskip{1em}
+    \frametitle{1.1.2 The meaning of probability}
+
+    When flipping a fair coin, we say that \textit{the probability of flipping heads is $0.5$}.
+    Which interpretation of this probability resonates with you?
+
+    \begin{enumerate}
+        \setlength\itemsep{1em}
+        \item \textit{If I flip the coin over and over, I'll flip heads roughly 50\% of the time.}
+        \item \textit{Heads and tails are equally plausible.}
+    \end{enumerate}
+\end{frame}
+
+\begin{frame}
+    \begin{enumerate}
+        \setlength\parskip{1em}
+        \setlength\itemsep{1em}
+        \item \textit{If I flip the coin over and over, I'll flip heads roughly 50\% of the time.}
+        
+        
+        \textbf{Frequentists} interpret probabilities as long-run frequencies of repeatable events.
+
+        \item \textit{Heads and tails are equally plausible.}
+            
+        \textbf{Bayesians} interpret probabilities in terms of relative plausibilities of events.
+    \end{enumerate}
+\end{frame}
+
+\begin{frame}
+    \setlength\parskip{1em}
+    An election is coming up and a pollster claims that candidate A has a $0.9$
+    probability of winning. How do you interpret this probability?
+
+    Which interpretation of this probability resonates with you?
+
+    \begin{enumerate}
+        \setlength\itemsep{1em}
+        \item \textit{Candidate A is nine times more likely to win than to lose.}
+        \item \textit{If we observe the election over and over, candidate A will win roughly 90\% of the time.}
+    \end{enumerate}
+\end{frame}
+
+\begin{frame}
+    \begin{enumerate}
+        \setlength\parskip{1em}
+        \setlength\itemsep{1em}
+        \item \textit{Candidate A is nine times more likely to win than to lose.}
+        
+        
+        \textbf{Bayesians} interpret probabilities in terms of relative plausibilities.
+
+        \item \textit{If we observe the election over and over, candidate A will win roughly 90\% of the time.}
+            
+        \textbf{Frequentists} interpret probabilities as long-run frequencies of ``repeatable'' events. (Hypothetical repetitions?)
+    \end{enumerate}
+\end{frame}
+
+\begin{frame}
+    \setlength\parskip{1em}
+    \frametitle{1.1.3 The Bayesian balancing act}
+
+    Consider two claims:
+    \begin{enumerate}
+        \setlength\itemsep{1em}
+        \item[(a)] Zuofu claims that he can predict the outcome of a coin.
+        \item[(b)] Kavya claims that she can distinguish natural and artificial sweeteners.
+    \end{enumerate}
+    
+    To test Zuofu's claim, you flip a fair coin 10 times and he correctly predicts all 10.
+    To test Kavya's claim, you give her 10 sweetener samples and she correctly identifies each.
+    In light of these experiments, what do you conclude?
+
+    \begin{enumerate}
+        \setlength\itemsep{1em}
+        \item \textit{The evidence supporting Zuofu's claim is just as strong as the evidence
+        supporting Kavya's claim.}
+        \item \textit{You're more confident in Kavya's claim than Zuofu's claim.}
+    \end{enumerate}
+\end{frame}
+
+\begin{frame}
+    \begin{enumerate}
+        \setlength\parskip{1em}
+        \setlength\itemsep{1em}
+        \item \textit{The evidence supporting Zuofu's claim is just as strong as the evidence
+        supporting Kavya's claim.}
+            
+        In a \textbf{frequentist} analysis, ``10 out of 10'' is
+        ``10 out of 10'' no matter if it's in the context of Zuofu's coins or
+        Kavya's sweeteners. Strict frequentists would have be equally confidence
+        in the assertions that Zuofu can predict coin flips and that Kavya can
+        distinguish between natural and artificial sweetener.
+
+        \item \textit{You're more confident in Kavya's claim than Zuofu's claim.}
+        
+        \textbf{Bayesian} analysis gives voice to our prior knowledge.
+        Our experience on Earth suggests that Zuofu is probably overstating
+        his abilities but that Kavya's claim is reasonable.
+    \end{enumerate}
+\end{frame}
+
+\begin{frame}
+    \setlength\parskip{1em}
+    \frametitle{1.4 Asking questions}
+
+
+    Suppose that during a recent doctor's visit, you tested positive for a
+    rare disease. If you only get to ask the doctor one question, which
+    would it be?
+
+    \begin{enumerate}
+        \setlength\itemsep{1em}
+        \item \textit{What's the chance that I actually have the disease?}
+        \item \textit{If I don't have the disease, what are the chances that I would've gotten this positive test result?}
+    \end{enumerate}
+\end{frame}
+
+\begin{frame}
+    \begin{enumerate}
+        \setlength\parskip{1em}
+        \setlength\itemsep{1em}
+        \item \textit{What's the chance that I actually have the disease?}
+            
+        A \textbf{Bayesian} hypothesis test seeks to answer:
+        In light of the observed data, what's the chance that the hypothesis is correct?
+
+
+        \item \textit{If I don't have the disease, what are the chances that I would've gotten this positive test result?}
+        
+        A \textbf{frequentist} hypothesis test seeks to answer:
+        If in fact the hypothesis is incorrect, what's the chance I'd have observed this, or even more extreme, data?
+    \end{enumerate}
+\end{frame}
+
+\begin{frame}
+
+    Given:
+    \setlength\parskip{1em}
+    \begin{itemize}
+        \setlength\itemsep{1em}
+        \item 2 news articles in 5 are fake.
+        \item 4 in 15 fake news articles have an exclamation point in the title.
+        \item 1 in 45 real news articles have an exclamation point in the title.
+    \end{itemize}
+    What is the probability that an article with an exclamation point
+    in the title is fake?
+    
+\end{frame}
+
+\begin{frame}
+    \[
+    P(\text{fake}\mid\text{!}) =
+    \frac{P(\text{!}\mid \text{fake})P(\text{fake})}{P(\text{!})}
+    \]
+
+    \[
+    P(\text{!}) = P(\text{!}\mid \text{fake})P(\text{fake}) +
+    P(\text{!}\mid \text{real})P(\text{real})
+    \]
+\end{frame}
+
+\begin{frame}
+    \frametitle{Vampirism}
+    \begin{itemize}
+        \setlength\itemsep{1em}
+    
+        \item A new test for vampirism is on the market.
+        \item A vampire tests positive for vampirism $95\%$ of the time.
+        \item A mortal will test positive for vampirism $1\%$ of the time.
+        \item Given that vampires make up $0.1\%$ of the population, what's the probability that someone who tests positive for vampirism is, in fact, a vampire?
+    \end{itemize}
+\end{frame}
+
+
+\begin{frame}    
+    \begin{align*}
+    &P(\text{vampire}\mid+)\\
+    &=\frac{P(+\mid\text{vampire})P(\text{vampire})}
+    {P(+\mid\text{vampire})P(\text{vampire}) + P(+\mid\text{mortal})P(\text{mortal})}\\
+    &= \frac{0.95\times 0.001}{0.95\times 0.001 + 0.01\times 0.999}\\
+    &= 0.087
+    \end{align*}
+
+    Thus, an individual that tests positive for vampirism has an $8.7\%$ chance of being a vampire.
+    Said differently, $91.3\%$ of positive test results are \emph{false positives}.
+\end{frame}
+\end{document}

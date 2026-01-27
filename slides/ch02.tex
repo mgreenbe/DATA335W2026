@@ -1,0 +1,236 @@
+\documentclass{beamer}
+
+\DeclareMathOperator{\SF}{sf}
+
+\title{Chapter 2 -- Bayes' Rule}
+\date{DATA 335 -- Statistical Modeling -- Winter 2026}
+
+\begin{document}
+
+\frame{\titlepage}
+
+\begin{frame}
+    \frametitle{Bayes' Rule}
+    Let $A$ and $B$ be events. Then:
+    \[
+    P(B\mid A) = \frac{P(A\mid B)P(B)}{P(A)}
+    \]
+\end{frame}
+
+\begin{frame}
+    \frametitle{The law of total probability}
+    Suppose that events $B_1,\ldots,B_n$ partition the sample space $\Omega$:
+    \[
+    \Omega = \bigcup_{i=1}^n B_i,\qquad B_i\cap B_j=\varnothing\quad(i\neq j).
+    \]
+    The \emph{law of total probability}:
+    \[
+    P(A) = \sum_{i=1}^n P(A\mid B_i)P(B_i).
+    \]
+    
+    Substituting for the denominator in Bayes' Rule gives:
+    \[
+    P(B\mid A) = \frac{P(A\mid B)P(B)}{\displaystyle\sum_{i=1}^n P(A\mid B_i)P(B_i)}.
+    \]
+\end{frame}
+
+\begin{frame}
+    \setlength\parskip{1em}
+    \frametitle{Example: Fake news}
+    Given:
+    \begin{itemize}
+        \setlength\itemsep{1em}
+        \item 2 news articles in 5 are fake.
+        \item 4 in 15 fake news articles have an exclamation point in the title.
+        \item 1 in 45 real news articles have an exclamation point in the title.
+    \end{itemize}
+    What is the probability that an article with an exclamation point
+    in the title is fake?
+    
+\end{frame}
+
+
+\begin{frame}
+    \setlength\parskip{1em}
+    Let $A$ be the event \textit{the article contains an exclamation point in its title}.
+
+    Let $B_1$ be the event \textit{the article is fake news}.
+
+    Let $B_2$ be the event \textit{the article is real news}.
+
+    Since an article is either real or fake but not both,
+    $$
+    B_1\cup B_2 = \Omega\qquad\text{and}\qquad
+    B_1\cap B_2 = \varnothing.
+    $$
+\end{frame}
+    
+\begin{frame}
+    Since $2$ in $5$ news articles are fake,
+    $$
+    P(B_1) = \frac25\qquad\text{and}\qquad P(B_2) = 1 - \frac25 = \frac35
+    $$
+
+    Since $4$ in $15$ (resp., $1$ in $45$) fake (resp., real) articles
+    have an exclamation point in the title,
+    \[
+    P(A\mid B_1) = \frac{4}{15}\qquad\text{and}\qquad
+    P(A\mid B_2) = \frac{1}{45}.
+    \]
+\end{frame}
+
+\begin{frame}
+    Apply Bayes' Rule to compute the probability that an
+    article with an exclamation point in its title is fake news:
+    
+    \begin{align*}
+    P(B_1\mid A) &= \frac{P(A\mid B_1)P(B_1)}{P(A\mid B_1)P(B_1) + P(A\mid B_2)P(B_2)}\\
+    &= \frac{\frac{4}{15}\times \frac{2}{5}}{\frac{4}{15}\times \frac{2}{5} + \frac{1}{45}\times \frac{3}{5}}\\
+    &= \frac89.
+    \end{align*}
+
+    Thus, $8$ in $9$ articles with exclamation points in their titles are fake news.
+\end{frame}
+
+
+\begin{frame}
+    \setlength\parskip{1em}
+    \frametitle{Exercise: Vampirism}
+    A new test for vampirism has the following characteristics:
+    \begin{itemize}
+        \setlength\itemsep{1em}
+        \item A vampire tests positive for vampirism $95\%$ of the time.
+        \item A mortal tests positive for vampirism $1\%$ of the time.
+    \end{itemize}
+    Given that vampires make up $0.1\%$ of the population, what's the probability that someone who tests positive for vampirism is, in fact, a vampire?
+\end{frame}
+
+
+\begin{frame}    
+    \begin{align*}
+    &P(\text{vampire}\mid+)\\
+    &=\frac{P(+\mid\text{vampire})P(\text{vampire})}
+    {P(+\mid\text{vampire})P(\text{vampire}) + P(+\mid\text{mortal})P(\text{mortal})}\\
+    &= \frac{0.95\times 0.001}{0.95\times 0.001 + 0.01\times 0.999}\\
+    &= 0.087
+    \end{align*}
+
+    Thus, an individual that tests positive for vampirism has an $8.7\%$ chance of being a vampire.
+    Said differently, $91.3\%$ of positive test results are \emph{false positives}.
+\end{frame}
+
+\begin{frame}
+    \frametitle{Example: Pop versus Soda}
+\end{frame}
+
+\begin{frame}
+\begin{itemize}
+    \item Men's heights in inches are normally distributed with mean $70$
+    and standard deviation $3$.
+    \item Women's heights in inches are normally distributed with mean $64.5$
+    and standard deviation $2.5$.
+\end{itemize}    
+Assuming that men and women are equally represented in the population,
+what's the probability that a person $>68$ inches tall is a man?
+\end{frame}
+
+\begin{frame}
+    \setlength\parskip{1em}
+    We introduce random variables $X$ for height and $Y$ for sex,
+    the latter coded as $0$ for female and $1$ for male.
+
+    Note that the events $Y=0$ and $Y=1$ are mutually exclusive
+    and exhaust all possibilities.
+
+    By Bayes' Rule,
+    \begin{align*}
+    &P(Y=1\mid X>68)\\
+    &=\frac{P(X>68\mid Y=1)P(Y=1)}
+    {P(X>68\mid Y=0)P(Y=0) + P(X>68\mid Y=1)P(Y=1)}.
+    \end{align*}
+
+    Since men and women are equally represented in the population,
+    \[
+    P(Y=0) = 0.5 = P(Y=1).
+    \]
+\end{frame}
+
+\begin{frame}
+    \setlength\parskip{1em}
+    The conditional probabilities $P(X>x\mid Y=y)$ are values of
+    \emph{survival functions} of the normal distributions.
+
+    The survival function $\SF(x\mid \mu,\sigma)$ of the
+    normal distribution with mean $\mu$ and standard deviation $\sigma$ is:
+    \[
+    \SF(x\mid \mu, \sigma) = P(X>x),\qquad
+    X\sim N(\mu, \sigma)
+    \]
+
+    Thus,
+    \begin{align*}
+    P(X>68\mid Y=0) &= \SF(68\mid 64.5, 2.5),\\
+    P(X>68\mid Y=1) &= \SF(68\mid 70, 3).
+    \end{align*}
+
+    Compute values of survival functions using \texttt{scipy.stats}.
+\end{frame}
+
+\begin{frame}
+    \frametitle{Theorem}
+    Suppose
+    \begin{align*}
+    X&\sim N(\mu_0,\sigma_0^2),\\
+    Y\mid X=x&\sim N(x, \sigma^2).
+    \end{align*}
+
+    Then
+    \[
+    X\mid Y=y\sim N(M_y, S^2),
+    \]
+    where
+    \[
+    M_y = \frac{\dfrac1{\sigma_0^2}\mu_0 + \dfrac1{\sigma^2}y}{\dfrac1{\sigma_0^2} + \dfrac1{\sigma^2}}
+    \qquad\text{and}\qquad
+    S^2 = \frac{1}{\dfrac1{\sigma_0^2} + \dfrac1{\sigma^2}}.
+    \]
+\end{frame}
+
+\begin{frame}
+    \setlength\parskip{1em}
+    Suppose that intrinsic intelligence quotient (IQ) is normally distributed in the
+    population with mean $100$ and standard deviation $15$.
+
+    Suppose, further, that IQ test scores for a person with an IQ of $x$
+    are normally distributed with mean $x$ and standard deviation $5$.
+
+    What is the probability that a person who scores $120$ on an IQ test has IQ at least 120?
+    
+\end{frame}
+
+\begin{frame}
+    Let $X$ denote intrinsic IQ and let $Y$ denote test score.
+
+    Then
+    \begin{align*}
+    X&\sim N(100,15^2),\\
+    Y\mid X=120&\sim N(120, 5^2).
+    \end{align*}
+
+    By the Theorem,
+    \[
+    X\mid Y=y\sim N(M_y, S^2),
+    \]
+    where
+    \[
+    M_y = 118
+    \qquad\text{and}\qquad
+    S^2 = 22.5 = 4.74^2.
+    \]
+    It follows that
+    \[
+    P(X > 120\mid Y=120) = \SF(120\mid 118, 4.74) = 0.34.
+    \]
+\end{frame}
+
+\end{document}

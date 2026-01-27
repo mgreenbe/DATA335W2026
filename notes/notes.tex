@@ -1,0 +1,909 @@
+\documentclass{amsart}
+
+
+\renewcommand{\phi}{\varphi}
+\newcommand{\One}{\mathbf{1}}
+\newcommand{\RR}{\mathbb{R}}
+\DeclareMathOperator{\TruncNorm}{TruncNorm}
+\DeclareMathOperator{\Exp}{\mathbb{E}}
+\DeclareMathOperator{\Expon}{Exp}
+\DeclareMathOperator{\Var}{\mathbb{V}}
+\DeclareMathOperator{\Prob}{\mathbb{P}}
+\DeclareMathOperator{\Categorical}{Categorical}
+\DeclareMathOperator{\Bernoulli}{Bernoulli}
+\DeclareMathOperator{\Binomial}{Binomial}
+\DeclareMathOperator{\Normal}{Normal}
+\DeclareMathOperator{\Uniform}{Uniform}
+\DeclareMathOperator{\SF}{sf}
+\DeclareMathOperator{\CDF}{cdf}
+\DeclareMathOperator{\PPF}{ppf}
+
+\newcommand{\vx}{\mathbf{x}}
+\newcommand{\va}{\mathbf{a}}
+
+\usepackage{amsmath, amsthm}
+
+\title{DATA 335 - Statistical Modelling}
+\author{Matthew Greenberg}
+\date{\today}
+
+\setlength\parskip{1em}
+\setlength\parindent{0em}
+\begin{document}
+\maketitle
+
+\section{The one-sample $t$-test}
+
+Suppose we want to test
+$$
+H_0:\mu=\mu_0\qquad\text{versus}\qquad
+H_1:\mu\neq\mu_0
+$$
+using a random sample
+$$
+X_0,\ldots,X_{n-1}\sim N(\mu,\sigma^2).
+$$
+
+Let $\bar{X}$ and $s^2$ be the sample mean and sample varaince, respectively:
+$$
+\bar{X} = \frac1n\sum_{i < n} X_i,\qquad
+S^2 = \frac1{n-1}\sum_{i < n}(X_i - \bar{X})^2
+$$
+
+We form the \emph{test statistic}
+$$
+T = \frac{\sqrt{n}(\bar{X} - \mu_0)}{S}.
+$$
+
+Write
+$$
+T = \frac{\sqrt{n}(\bar{X} - \mu_0)/\sigma}{S/\sigma}.
+$$
+
+$$
+\sqrt{n}(\bar{X} - \mu_0)/\sigma\sim N(0, 1)
+$$
+
+$$
+\frac{S}{\sigma} = \sqrt{\frac{S^2}{\sigma^2}}
+= \sqrt{\frac1{n-1}\sum_{i < n}\left(\frac{X_i - \bar{X}}{\sigma}\right)^2}
+= \sqrt{V/(n-1)},
+$$
+where
+$$
+V = \sum_{i < n}\left(\frac{X_i - \bar{X}}{\sigma}\right)^2\sim\chi^2_{n-1}
+$$
+
+Under the null hypothesis,
+$$
+T\sim t_{n-1}.
+$$
+
+Under $H_0$,
+$$
+\bar{X}\sim N\left(\mu_0,\frac{\sigma^2}{n}\right),
+$$
+so
+$$
+U := \frac{\sqrt{n}(\bar{X} - \mu_0)}{\sigma} \sim N(0, 1).
+$$
+
+$$
+V := (n-1)\frac{S^2}{\sigma^2} =
+\sum_{i < n}\left(\frac{X_i - \bar{X}}{\sigma}\right)^2
+\sim \chi^2_{n-1}
+$$
+
+Thus,
+$$
+T = \frac{U}{\sqrt{V/(n-1)}}\sim t_{n-1}.
+$$
+
+\section{The two-sample $t$-test}
+
+$$
+\Var(\bar{X} - \bar{Y}) = \Var(X) + \Var(Y)
+= \frac{\sigma^2}{m} + \frac{\sigma^2}{n}
+= \sigma^2\left(\frac{1}{m} + \frac{1}{n}\right)
+$$
+
+$$
+S_p^2 = \frac{(m-1)S_X^2 + (n-1)S_Y^2}{m + n - 2}
+= \frac1{m + n - 2}\sum_{i < m}(X_i - \bar{X})^2 + \sum_{j < n}(Y_j - \bar{Y})^2
+$$
+
+$$
+T = \frac{\bar{X} - \bar{Y}}{S_p\sqrt{\frac1m + \frac1n}}
+= \frac{\dfrac{\bar{X} - \bar{Y}}{\sigma\sqrt{\frac1m + \frac1n}}}{\dfrac{S_p}{\sigma}}
+$$
+
+$$
+\frac{\bar{X} - \bar{Y}}{\sigma\sqrt{\frac1m + \frac1n}}\sim N(0, 1)
+$$
+
+$$
+\frac{S_p}{\sigma} = \sqrt{\frac{S_p^2}{\sigma^2}}
+= \sqrt{\frac1{m + n - 2}\left(\sum_{i < m}\left(\frac{X_i - \bar{X}}{\sigma}\right)^2 + \sum_{j < n}\left(\frac{Y_j - \bar{Y}}{\sigma}\right)^2\right)}
+= \sqrt{\frac{V}{m + n - 2}},
+$$
+where
+$$
+V = \sum_{i < m}\left(\frac{X_i - \bar{X}}{\sigma}\right)^2 + \sum_{j < n}\left(\frac{Y_j - \bar{Y}}{\sigma}\right)^2
+\sim\chi^2_{m + n - 2}
+$$
+
+Therefore,
+$$
+T\sim t_{m + n - 2}.
+$$
+
+If $m=n$, then
+$$
+T = \frac{\bar{X} - \bar{Y}}{S_p\sqrt{\frac2n}}\sim t_{2n-2}.
+$$
+
+\section{One-way ANOVA}
+\[
+\bar{Y}_i = \frac1J\sum_{j < J}Y_{ij}
+\]
+
+\[
+\bar{Y} = \frac1{IJ}\sum_{i < I}\sum_{j < J}y_{ij}
+= \frac1I\sum_{i < I}\bar{Y}_i
+\]
+
+When $I=2$,
+\[
+\bar{Y} = \frac{\bar{Y}_1 + \bar{Y}_2}{2}.
+\]
+Therefore,
+\[
+    \bar{Y}_1 - \bar{Y} = \frac{Y_1 - Y_2}{2},\qquad
+    \bar{Y}_2 - \bar{Y} = \frac{Y_2 - Y_1}{2},
+\]
+
+Therefore,
+\[
+    (\bar{Y}_1 - \bar{Y})^2 + (\bar{Y}_2 - \bar{Y})^2
+    = \frac12\left(\bar{Y}_1 - \bar{Y}_2\right)^2
+\]
+
+\begin{align*}
+    \operatorname{SSB} 
+    &= J\left((\bar{Y}_1 - \bar{Y})^2 + (\bar{Y}_2 - \bar{Y})^2\right)\\
+    &=\frac{J}{2}\left(\bar{Y}_1 - \bar{Y}_2\right)^2
+\end{align*}
+
+\begin{align*}
+    S_p^2
+    = \frac1{I(J-1)}\left(\sum_{j < J}(Y_{1j} - \bar{Y}_1)^2\right)
+\end{align*}
+
+\section{Hierarchical models}
+
+\begin{align*}
+x_i&\sim N(\mu, \sigma^2)&& i < I\\
+y_{ij}\mid x_i&\sim N(x_i,\tau^2)&&i < I, j < J
+\end{align*}
+
+Law of total expectation:
+\begin{align*}
+    \Exp(y_{ij}) &= \Exp(\Exp(y_{ij}\mid x_i))\\
+    &= \Exp(x_i)\\
+    &= \mu
+\end{align*}
+
+Law of total variance:
+\begin{align*}
+    \Var(y_{ij}) &= \Exp(\Var(y_{ij}\mid x_i)) + \Var(\Exp(y_{ij}\mid x_i))\\
+    &= \Exp(\tau^2) + \Var(x_i)\\
+    &= \tau^2 + \sigma^2
+\end{align*}
+
+Therefore
+\[
+y_{ij}\sim N(\mu, \sigma^2 + \tau^2).
+\]
+
+\begin{align*}
+    Q(\theta_t, \theta) &= \Exp_{x\sim f(x\mid y, \theta_t)}\left(\log f(x, y\mid\theta)\right)
+\end{align*}
+
+
+\begin{align*}
+f(x\mid y) &\propto f(y\mid x)f(x)\\
+&\propto \exp\left(-\frac1{2\tau^2}(y - x)^2\right)
+\exp\left(-\frac1{2\sigma^2}(x - \mu)^2\right)
+\end{align*}
+
+\begin{align*}
+\frac1{\tau^2}(y - x)^2 + \frac1{\sigma^2}(x - \mu)^2
+&= \left(\frac1{\tau^2} + \frac1{\sigma^2}\right)x^2 - 2\left(\frac{y}{\tau^2} + \frac{\mu}{\sigma^2}\right)x + \frac{y^2}{\tau^2} + \frac{\mu^2}{\sigma^2}\\
+&= Ax^2 -2B(y)x + C(y)\\
+&= A\left(x^2 - 2\frac{B(y)}{A}x + \frac{B(y)^2}{A^2}\right) + D(y)\\
+&= A\left(x - \frac{B(y)}{A}\right)^2 + D(y)
+\end{align*}
+
+
+\begin{align*}
+    f(x\mid y)\propto \exp\left(\right)
+\end{align*}
+
+\section{Right-censored data}
+\[
+X_i\sim N(\mu,\sigma^2),\qquad Y_i = \min(X_i, a)
+\]
+
+Given estimates $\mu_t$, $\sigma_t^2$ of $\mu$ and $\sigma^2$.
+
+\[
+\Exp_{x_i\sim p_t(x_i\mid y_i)}\left[\log f(x_i)\right]
+\]
+
+\[
+\ell = \sum_i\left(\frac12\log(2\pi) + \frac12\log\sigma^2 + \frac1{2\sigma^2}(\Exp_t[x_i^2\mid y_i] - 2\mu \Exp_t[x_i\mid y_i] + \mu^2)\right)
+\]
+
+\[
+\frac{\partial \ell}{\partial \mu} = \sum_i\frac1{2\sigma^2}\left(- 2 \Exp_t[x_i\mid y_i] + 2\mu\right)
+= \frac1{\sigma^2}\left(n\mu -\sum_i\Exp_t[x_i\mid y_i]\right)=0
+\]
+
+\[
+\mu = \frac1n\sum_i\Exp_t[x_i\mid y_i]
+\]
+
+\[
+\frac{\partial \ell}{\partial \sigma^2}
+= \frac{n}{2\sigma^2} - \frac1{(2\sigma^2)^2}\sum_i\Exp_t\left[(x_i - \mu)^2\mid y_i\right]=0
+\]
+
+\[
+\sigma^2 = \frac1n\sum_i\Exp_t\left[(x_i - \mu)^2\mid y_i\right]
+\]
+
+Let
+\[
+I = \{i : y_i < b\},\qquad J = \{i : y_i = a\}.
+\]
+
+If $i\in I$, then $\Exp[x_i\mid y_i] = y_i$.
+
+If $i\in J$, then $\Exp[x_i\mid y_i] = \Exp_{x\sim N(\mu_t, \sigma_t^2)}[x\mid x \geq a]$.
+
+Suppose $X\sim N(0, 1)$.
+\[
+E_{X\sim N(0, 1)}[X\mid X \geq a] = \frac{\varphi(a)}{1 - \Phi(a)}
+= m_1(a)
+\]
+
+Suppose $X\sim N(\mu, \sigma^2)$.
+\[
+E[X\mid X\geq a] = \sigma m_1(a) + \mu
+\]
+
+\section{Truncated normal distributions}
+
+Let $\Phi(x\mid \mu, \sigma)$ and $\phi(x\mid\mu, \sigma)$ be the
+distribution and density functions, respectively, of the normal
+distribution with mean $\mu$ and standard deviation $\sigma$.
+As shorthand, write $\Phi(x)$ and $\phi(x)$ for $\Phi(x\mid 0, 1)$
+and $\phi(x\mid 0, 1)$, respectively. In particular,
+\[
+\phi(x) = \frac1{\sqrt{2\pi}}e^{-x^2/2}.
+\]
+
+For parameters $a$, $b$, $\mu$, and $\sigma$ with $a < b$ and
+$\sigma > 0$, let $\TruncNorm(a, b; \mu, \sigma)$ be the distribution
+with density
+\[
+\phi(x\mid a, b; \mu,\sigma)
+= \frac{\One_{[a, b]}(x)\phi(x\mid\mu,\sigma)}
+{\Phi(b\mid\mu,\sigma) - \Phi(a\mid \mu, \sigma)}.
+\] 
+
+\[
+\frac{d\phi}{dx} = -x\phi(x)
+\]
+
+Suppose $Z\sim N(0, 1)$.
+\begin{align*}
+    \Exp[Z\mid a < Z < b] &= \frac1{\Phi(b) - \Phi(a)}\int_a^b x\phi(x)dx\\
+    &= \frac1{\Phi(b) - \Phi(a)}\int_a^b \frac{d}{dx}(-\phi(x))dx\\
+    &= \frac{\phi(a) - \phi(b)}{\Phi(b) - \Phi(a)}
+\end{align*}
+
+Special cases:
+\begin{align*}
+    \Exp[Z\mid a < Z] &= \frac{\phi(a)}{1 - \Phi(a)} = \psi(a)\\
+    \Exp[Z\mid Z < b] &= \frac{-\phi(b)}{\Phi(b)}
+\end{align*}
+
+We have:
+\begin{align*}
+\frac{d}{dx}x\phi(x) &= \phi(x) + x\phi'(x)\\
+&= \frac{d}{dx}\Phi(x) - x^2\phi(x)
+\end{align*}
+
+Rearrange:
+\[
+\frac{d}{dx}\left(\Phi(x) - x\phi(x)\right) = x^2\phi(x).
+\]
+
+Therefore:
+\begin{align*}
+    \Exp[Z^2\mid a < Z < b] &= \frac1{\Phi(b) - \Phi(a)}\int_a^b x^2\phi(x)dx\\
+    &= \frac1{\Phi(b) - \Phi(a)}\int_a^b \frac{d}{dx}\left(\Phi(x) - x\phi(x)\right)dx\\
+    &= \frac1{\Phi(b) - \Phi(a)}\left(\Phi(b) - b\phi(b) - \Phi(a) + a\phi(a)\right)\\
+    &= 1 + \frac{a\phi(a) - b\phi(b)}{\Phi(b) - \Phi(a)}
+\end{align*}
+
+Special cases:
+\begin{align*}
+    \Exp[Z^2 \mid a < Z] &= 1 + \frac{a\phi(a)}{1 - \Phi(a)} = 1 + a\psi(a)\\
+    \Exp[Z^2 \mid Z < b] &= 1 - \frac{b\phi(b)}{\Phi(b)}
+\end{align*}
+
+Suppose $X\sim N(\mu, \sigma^2)$.
+Set
+\[
+Z = \frac{X - \mu}{\sigma},\qquad
+\alpha = \frac{a - \mu}{\sigma},\qquad
+\beta = \frac{b - \mu}{\sigma}.
+\]
+
+\begin{align*}
+\Exp[X\mid a < X < b] 
+&= \mu + \sigma \Exp[Z\mid \alpha < Z < \beta]\\
+&= \mu + \sigma m_1(\alpha, \beta)
+\end{align*}
+
+Define
+\[
+\psi(x) = \frac{\phi(x)}{1 - \Phi(x)}
+\]
+\begin{align*}
+    \Exp[X\mid a < X] &= \mu + \sigma \psi(\alpha)
+\end{align*}
+
+\begin{align*}
+    \Exp[X^2 \mid a < X < b]
+    &= \Exp[(\mu + \sigma Z)^2 \mid \alpha < Z < b]\\
+    &= \mu^2 + 2\mu\sigma m_1(\alpha, \beta) + \sigma^2 m_2(\alpha, \beta)
+\end{align*}
+
+\begin{align*}
+    \Exp[X^2 \mid a < X] &= \mu^2 + 2\mu\sigma \psi(\alpha) + \sigma^2(1 + \alpha\psi(\alpha))\\
+    &= \mu^2 + \sigma^2 + \sigma\psi(\alpha)(2\mu + \sigma\alpha)
+\end{align*}
+
+\begin{align*}
+u_{t, i} &= \begin{cases}
+x_i&\text{if $x_i < a$,}\\
+\mu_t + \sigma_t\psi(\alpha_t)&\text{otherwise}
+\end{cases}\\
+v_{t, i} &= \begin{cases}
+x_i^2&\text{if $x_i < a$}\\
+\mu_t^2 + \sigma_t^2 + \sigma_t\psi(\alpha_t)(2\mu_t + \sigma_t\alpha_t)&\text{otherwise}
+\end{cases}
+\end{align*}
+
+
+
+\begin{align*}
+\mu_{t + 1} &= \frac1n\sum_{i < n}u_{t, i}\\
+\sigma^2_{t + 1} &= \frac1n\sum_{i < n}\left(v_{t, i} - 2\mu_{t + 1} u_{t, i} + \mu_{t + 1}^2\right)\\
+&= \frac1n\sum_{i < n}v_{t, i} - \mu_{t + 1}^2
+\end{align*}
+
+\section{Exponential censoring}
+
+\[
+\phi(x) = \lambda e^{-\lambda x}
+\]
+
+Suppose $X\sim \Expon(\lambda)$.
+\begin{align*}
+\Exp[X\mid X > a] &= \frac1{e^{-\lambda a}} \int_a^\infty x\lambda e^{-\lambda x}dx\\
+&= \int_a^\infty \lambda x e^{-\lambda(x - a)}dx\\
+&= \int_0^\infty \lambda (t + a)e^{-\lambda t}dt\\
+&= \int_0^\infty t\phi(t)dt + a\int_0^\infty \phi(t)dt\\
+&= \frac1\lambda + a
+\end{align*}
+
+\section{Hypothesis testing}
+
+Let $\Theta = \Theta_0\sqcup \Theta_1$ and let $R$ be a rejection region.
+Define the \emph{power function $\beta:\Theta\to\RR$} by
+\[
+\beta(\theta) = \Prob_\theta(R).
+\]
+
+The \emph{size} of the test is
+\[
+\alpha = \sup_{\theta\in\Theta_0}\beta(\theta).
+\]
+
+Suppose $X\sim\Binomial(5, \theta)$
+\[
+\Theta_0 = \{\theta \leq 1/2\},\qquad
+\Theta_1 = \{\theta > 1/2\},\qquad
+\]
+Let $\{X = 5\}$ be the rejection region.
+\[
+\beta(\theta) = \Prob_\theta(X=5) = \binom{5}{5}\theta^5(1 - \theta)^{5 - 5} = \theta^5
+\]
+The size of the test is
+\[
+\alpha = \sum_{\theta \leq 1/2}\theta^5 = 1/32=0.03125.
+\]
+
+Suppose $X\sim \Normal(\theta,\sigma^2)$ with $\sigma^2$ known.
+Let 
+\[
+\Theta_0 = \{\theta \leq \theta_0\},\qquad
+\Theta_1 = \{\theta > \theta_0\},\qquad
+\]
+Let $\{X > x\}$ be the rejection region. Then
+\begin{align*}
+\beta(\theta) = \Prob_\theta(X > x)
+&= \Prob_\theta\left(\frac{X - \theta}{\sigma} > \frac{x - \theta}{\sigma}\right)\\
+&= \Prob\left(Z > \frac{x - \theta}{\sigma}\right)\\
+\end{align*}
+
+Since $\Prob\left(Z > \frac{x - \theta}{\sigma}\right)$ is an increasing function of theta,
+\[
+\sup_{\theta\leq \theta_0} \beta(\theta) = \Prob\left(Z > \frac{x - \theta_0}{\sigma}\right)
+\]
+
+\section{The German tank problem}
+
+Consider the problem of estimating $\theta$ from a random sample 
+\[
+X_0,\ldots,X_{n-1}\sim \Uniform[0, \theta].
+\]
+
+Since
+\[
+\mathbb{E}[\bar{X}]=\frac\theta2,
+\]
+it follows that
+\[
+U = 2\bar{X}
+\]
+is an unbiased estimator of $\theta$.
+
+Using the fact that
+\[
+\Var[X_i] = \frac{\theta^2}{12},
+\]
+it follows that
+\[
+\Var[U] = \frac{\theta^2}{3n}.
+\]
+
+Another estimator is
+\[
+V = \max\{X_0,\ldots,X_{n-1}\}.
+\]
+This estimator, however, is biased downward:
+\[
+\Exp[V] < \theta.
+\]
+We can actually compute this bias exactly.
+
+Write $F_V$ for the cumulative distribution function of $V$:
+\[
+F_V(x) = \Prob[V < x].
+\]
+Since $V < x$ if and only if $X_i < x$ for all $i$ and, moreover, the $X_i$ are independent,
+\[
+F_V(x) = \prod_{i < n}\Prob[X_i < x] = \frac{x^n}{\theta^n}
+\]
+The density $f_V(x)$ of $V$ is given by the derivative of $F_V(x)$:
+\[
+f_V(x) = \frac{n}{\theta^n}x^{n - 1}.
+\]
+Therefore,
+\begin{align*}
+\Exp[V] &= \int_0^\theta x f_V(x)dx\\
+&= \frac{n}{\theta^n}\int x^ndx\\
+&= \frac{n}{\theta^n}\frac{\theta^{n + 1}}{n + 1}\\
+&= \frac{n}{n+1}\theta
+\end{align*}
+
+It follows that
+\[
+W = \frac{n + 1}{n}V
+\]
+is an unbiased estimator of $\theta$.
+
+For the German tank problem with
+\[
+X_0=19,\quad X_1=40,\quad X_2=42,\quad X_3=60,
+\]
+(see the Wikipedia article) this gives
+\[
+W = 75.
+\]
+
+While we're at it, let's compute the second moment of $V$:
+\begin{align*}
+\Exp[V^2] &= \int_0^\theta x^2 f_V(x)dx\\
+&= \frac{n}{\theta^n}\int x^{n + 1}dx\\
+&= \frac{n}{\theta^n}\frac{\theta^{n + 2}}{n + 2}\\
+&= \frac{n}{n+2}\theta^2
+\end{align*}
+
+Therefore,
+\begin{align*}
+    \Var[V] &= \Exp[V^2] - \Exp[V]^2\\
+    &= \frac{n}{n+2}\theta^2 - \left(\frac{n}{n+1}\theta\right)^2\\
+    &= \frac{n}{(n + 2)(n + 1)^2}\theta^2
+\end{align*}
+
+Therefore,
+\begin{align*}
+    \Var[W] &= \left(\frac{n+1}{n}\right)^2\Var[V]\\
+    &= \frac{\theta^2}{n(n+2)}
+\end{align*}
+
+Notice that
+\[
+\Var[W]=\frac{\theta^2}{n(n+2)} < \frac{\theta^2}{3n} = \Var[U]
+\]
+for all $n > 1$.
+
+Thus, $W$ is a better estimator than $U$ whenever $n > 1$.
+
+\section{More German tank problem}
+
+Now let's try to approach the German tank problem discretely.
+
+We'll view a sample of $k$ captured German tanks as a sample of size
+$k$ drawn without replacement from $\{1, \ldots, n\}$.
+
+Write $\Omega_{n, k}$ for the set of $k$-tuples of distinct elements of $\{1, \ldots, n\}$.
+\[
+|\Omega_{n, k}| =  k!\binom{n}{k}
+\]
+
+Now consider
+\[
+\Omega_{n, k, m} := \{(s_1,\ldots,s_k)\in\Omega_{n, k} : \max\{s_1,\ldots,s_k\}=m\}
+\]
+
+To make an element of $\Omega_{n, k, m}$, draw an element of $\Omega_{m-1, k-1}$
+and then insert $m$ somewhere in the sequence.
+Thus,
+\[
+|\Omega_{n, k, m}| = k!\binom{m - 1}{k - 1}
+\]
+Therefore,
+\[
+p(m\mid n) = 
+\frac{\displaystyle\binom{m-1}{k-1}}{\displaystyle\binom{n}{k}}\mathbf{1}_{[m_s,\infty)}(n)
+\propto \frac{\mathbf{1}_{[m,\infty)}(n)}{\displaystyle \binom{n}{k}}.
+\]
+
+\[
+p(s\mid n) =
+\frac{\mathbf{1}_{[m_s,\infty)}(n)}{\displaystyle k!\binom{n}{k}}
+\propto \frac{\mathbf{1}_{[m_s,\infty)}(n)}{\displaystyle \binom{n}{k}}
+\]
+Using these likelihoods, we can compute the posterior in any given example.
+
+By the above,
+\[
+p(m\mid n) = \frac{|\Omega_{n, k, m}|}{|\Omega_{n, k}|}
+= \frac{\displaystyle\binom{m - 1}{k - 1}}{\displaystyle\binom{n}{k}}.
+\]
+
+Therefore,
+\[
+\Exp[m\mid n] = \binom{n}{k}^{-1}\sum_{m=k}^n m\binom{m - 1}{k - 1}.
+\]
+
+But
+\[
+m\binom{m - 1}{k - 1} = k\binom{m}{k},
+\]
+so
+\[
+\Exp[m\mid n] =
+k\binom{n}{k}^{-1}\sum_{m=k}^n\binom{m}{k}
+\]
+
+But
+\[
+\sum_{m=k}^n\binom{m}{k} = \binom{n + 1}{k + 1},
+\]
+so
+\[
+\Exp[m\mid n] = k\binom{n}{k}^{-1}\binom{n + 1}{k + 1}
+\]
+
+But
+\[
+\binom{n + 1}{k + 1} = \frac{n + 1}{k + 1}\binom{n}{k},
+\]
+so
+\[
+\Exp[m\mid n] = \frac{k}{k + 1}(n + 1)
+\]
+
+Therefore,
+\[
+\Exp\left[\left(\frac{k + 1}{k}\right)m - 1\right] = n.
+\]
+
+\section{Gambler's ruin}
+
+Suppose the player wins with probability $p$ and the house wins with probability $1 - p$.
+
+Let $a_i$ be the probability that the fortune of a player with $i$ dollars will hit $k$ dollars before hitting $0$ dollars.
+Note that $a_0=0$ and that $a_k=1$.
+
+We have
+\[
+a_i = pa_{i + 1} + (1-p)a_{i - 1}
+\]
+
+\[
+a_{i + 1} = \frac1p a_i - \frac{1 - p}{p}a_{i - 1}
+\]
+
+\[
+a_2 = \frac1p a_1
+\]
+
+\[
+a_3 = \frac1p a_2 - \frac{1 - p}p a_1
+\]
+
+\[
+x^2 - \frac1p x + \frac{1 - p}p
+\]
+
+\[
+(x - 1)\left(x - \frac{1 - p}{p}\right)
+\]
+
+\[
+a_i = A + B\left(\frac{1 - p}{p}\right)^i
+\]
+
+\[
+A + B = 0,\quad
+A + B\left(\frac{1 - p}{p}\right)^k = 1
+\]
+
+\[
+B\left(\left(\frac{1 - p}{p}\right)^k - 1\right) = 1
+\]
+
+\[
+B = \frac1{\left(\frac{1 - p}{p}\right)^k - 1}
+\]
+
+\[
+a_i = \frac{\left(\frac{1 - p}{p}\right)^i - 1}{\left(\frac{1 - p}{p}\right)^k - 1}
+\]
+
+\section{Order statistics}
+What is the distribution of $\max\{X_1, X_2\}$, where $X_1$ and $X_2$ are independent draws from the uniform distribution on $\{1,\ldots,k\}$?
+
+Let $Y = \max\{X_1, X_2\}$
+
+\begin{align*}
+\Prob(Y = i) &= \Prob(X_1 = X_2 = i) + \Prob(X_1 = i, X_2 < i) + \Prob(X_1 < i, X_2 = i)\\
+&= \Prob(X_1 = i)\Prob(X_2 = i) + \Prob(X_1 = i)\Prob(X_2 < i) + \Prob(X_1 < i)\Prob(X_2 = i)\\
+&= \frac1{k^2} + \frac1k\left(\frac{i - 1}{k}\right) + \left(\frac{i - 1}{k}\right)\frac1k\\
+&= \frac1{k^2}(1 + 2(i - 1))\\
+&= \frac1{k^2}(2i - 1)
+\end{align*}
+
+\[
+\sum_{i=1}^k(2i - 1) = 2\sum_{i=1}^ki - k = 2\frac{k(k+1)}{2} - k = k^2
+\]
+
+So
+\[
+\sum_{i=1}^k \Prob(Y = i) = 1,
+\]
+as required, giving a check on our calculation.
+
+\section{Beta distribution}
+
+The beta distribution with parameters $a > 0$ and $b > 0$ has mean and variance given by
+\[
+\mu = \frac{a}{a + b} = 1 - \frac{b}{a + b},\qquad
+\sigma^2 = \frac{ab}{(a + b)^2(a + b + 1)}
+\]
+
+We want to solve for $a$ and $b$ in terms of $\mu$ and $\sigma$.
+
+Set
+\[
+k = a + b.
+\]
+Then $k > 0$.
+
+Then
+\[
+a = \mu k,\qquad
+b = (1 - \mu)k.
+\]
+
+In particular,
+\[
+B(\mu k, (1 - \mu)k),\quad k > 0
+\]
+is the family of beta distributions with mean $\mu$.
+
+
+Substitute:
+\[
+\sigma^2 = \frac{\mu k(1-\mu)k}{k^2(k + 1)}
+= \frac{\mu(1 - \mu)}{k + 1}
+\]
+Note that $\sigma^2 < \mu(1 - \mu)$ because $k > 0$.
+
+Solve for $k$:
+\[
+k = \frac{\mu(1 - \mu)}{\sigma^2} - 1
+\]
+
+Therefore:
+\[
+a = \mu k=\mu\left(\frac{\mu(1 - \mu)}{\sigma^2} - 1\right),\qquad
+b = (1 - \mu)k = (1 - \mu)\left(\frac{\mu(1 - \mu)}{\sigma^2} - 1\right)
+\]
+
+\section{Location-scale families}
+
+Let $X$ be a random variable with distribution $F$.
+If $u$ and $v$ are real numbers with $v > 0$, write $F_{u, v}$
+for the distribution function of the random variable $u + vX$.
+Since
+\[
+u + vX \leq x \Longleftrightarrow X < \frac{x - u}{v},
+\]
+we have
+\[
+F_{u, v}(x) = F\left(\frac{x - u}{v}\right).
+\]
+
+If $X$ has density $f$, write $f_{u, v}$ for the density of $u + vX$,
+then 
+$$
+f_{u, v}(x) = F_{u, v}'(x) = \frac1v F'\left(\frac{x - u}{v}\right)
+= \frac1v f\left(\frac{x - u}{v}\right)
+$$
+
+\section{Maximum likelihood estimation}
+
+$x_1,\ldots,x_n\sim \Expon(\lambda)$
+
+\[
+\Prob(X > a) = \int_a^\infty \lambda e^{-\lambda x}dx = \left(-e^{-\lambda x}\right)^\infty_a = e^{-\lambda a}
+\]
+
+
+
+\begin{align*}
+\Exp(x \mid x > a) &= \frac1{\Prob(X > a)}\int_{a}^\infty x \lambda e^{-\lambda x}dx
+\\
+&= \int_a^\infty\lambda x e^{-\lambda (x - a)}dx\\
+&= \int_0^\infty \lambda (y + a)e^{-\lambda y}dy\\
+&= \int_0^\infty y\lambda  e^{-\lambda y}dy + a\int_0^\infty \lambda e^{-\lambda y}dy\\
+&= \Exp(X) + a\\
+&= \frac1\lambda + a
+\end{align*}
+
+\begin{align*}
+\Exp_{\vx\sim f(\vx\mid\lambda')}(\log f(\vx\mid \lambda)\mid \vx > \va) &= \sum_{i=1}^n \left(\log \lambda - \lambda \Exp_{\vx\sim f(\vx\mid\lambda')}(x_i\mid x_i > a_i)\right)\\
+&= n\log\lambda - \lambda \sum_{i=1}^n \left(\frac1{\lambda'} + a_i\right)
+\end{align*}
+
+\section{Hypothesis testing}
+
+Let $X_1,\ldots,X_n\sim N(\mu, \sigma^2)$ be a random sample with $\mu$ and $\sigma$ unknown.
+
+We want to test the null hypothesis $\mu=\mu_0$ using the test statistic
+$$
+T = \frac{\bar{X}_n - \mu_0}{S_n},
+$$
+where
+$$
+\bar{X}_n = \frac1n\sum_{i=1}^n X_i,\qquad
+S_n = \frac1{n - 1}\sum_{i=1}^n (X_i - \bar{X}_n)^2.
+$$
+
+Say we reject $H_0$ if $|T| > c$.
+
+Under $H_0$, $T\sim t_{n-1}$.
+
+The level of the test is
+$$
+\alpha = \Prob(|T| > c\mid H_0) = 2\Prob(T > c) = 2(1 - \Prob(T \leq c)) = 2(1 - \CDF_{t_{n-1}}(c)).
+$$
+
+We can choose $c$ such that the test has level $\alpha$ by solving
+$$
+\alpha = 2(1 - \CDF_{t_{n-1}}(c))
+$$
+for $c$ in terms of $\alpha$, giving
+$$
+c = \PPF_{t_{n-1}}(1 - \alpha/2).
+$$
+
+\section{Poisson distribution}
+
+The Poisson distribution with parameter $\lambda$ is the discrete distribution with mass function
+$$
+\Prob(X=x) = \frac{\lambda^x}{x!}e^{-\lambda},\qquad x=0,1,\ldots.
+$$
+
+\begin{align*}
+\Exp(X) &= \sum_{x=0}^\infty x\Prob(X=x)\\
+&= \lambda\sum_{x=1}^\infty\frac{\lambda^{x - 1}}{(x - 1)!} e^{-\lambda}\\
+&= \lambda \sum_{x=0}^\infty \frac{\lambda^x}{x!}e^{-\lambda}\\
+&= \lambda
+\end{align*}
+
+\begin{align*}
+\Exp(X^2) &= \sum_{x=0}^\infty x^2\Prob(X=x)\\
+&= \lambda\sum_{x=1}^\infty \frac{x\lambda^{x - 1}}{(x - 1)!}e^{-\lambda}\\
+&= \lambda^2 + \lambda
+\end{align*}
+
+$$
+\Var(X) = \Exp(X^2) - \Exp(X)^2 = \lambda^2 + \lambda - \lambda^2 = \lambda
+$$
+
+$$
+f(\lambda) = \sum_{x=1}^\infty\frac{\lambda^x}{(x - 1)!} = \lambda e^\lambda
+$$
+
+$$
+f'(\lambda) = \sum_{x=1}^\infty \frac{x\lambda^{x - 1}}{(x - 1)!} = (1 + \lambda)e^{\lambda}
+$$
+
+$$
+\log f(x_1,\ldots,x_n\mid\lambda) = \sum_i (x_i\log\lambda - \log x_i! - \lambda)
+$$
+
+$$
+\frac{d}{d\lambda}f(x_1,\ldots,x_n\mid\lambda)
+= \sum_i\left(\frac{x_i}{\lambda} - 1\right)
+= \frac{x_1+\cdots x_n}{\lambda} - n
+$$
+
+$$
+\frac{d}{d\lambda}f(x_1,\ldots,x_n\mid\lambda) = 0
+\Longleftrightarrow \lambda = \frac{x_1+\cdots+x_n}n
+$$
+
+$$
+\widehat\lambda = \frac{X_1+\cdots+X_n}n
+$$
+
+$$
+\Exp[\widehat\lambda] = \lambda,\qquad
+\Var(\widehat\lambda) = \frac\lambda n
+$$
+
+If $n$ is large, then $\widehat\lambda$ is approximately
+$N(\lambda, \lambda/n)$-distributed.
+
+In 1000 tosses of a coin, $560$ heads and $440$ tails appear.
+Is it reasonable to assume that the coin in fair?
+Justify your answer.
+
+Suppose $X\sim \Binomial(1000, 0.5)$. Then
+$$
+\Prob(X \geq 560) \approx 8.25\times 10^{-5}
+$$
+
+\end{document}
